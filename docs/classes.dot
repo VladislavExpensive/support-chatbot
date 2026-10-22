@@ -1,0 +1,18 @@
+digraph Classes {
+ graph [rankdir=LR,bgcolor="#f4f0e5",pad="0.3",nodesep="0.28",ranksep="0.45",dpi=180];
+ node [shape=box,fontname="Arial",fontsize=18,style=filled,fillcolor="#f4f0e5",color="#141714",penwidth=1.4,margin="0.18,0.13"];
+ edge [color="#141714",penwidth=1.3,arrowsize=0.75];
+ Send [label="SendMessageCommand\nMessage / Execute",fillcolor="#ff9658"];
+ Cmd [label="«interface»\nIUserCommand\nMessage / Execute"];
+ Inv [label="CommandInvoker\nExecute / Replay",fillcolor="#bef343"];
+ J [label="ActionJournal\nAdd / Print"];
+ E [label="JournalEntry\nMessage / Before / After"];
+ Bot [label="SupportBot\nReceive / ChangeState",fillcolor="#bef343"];
+ State [label="«interface»\nIChatState\nName / Handle"];
+ G [label="GreetingState"];C [label="ClarificationState"];O [label="OperatorState"];F [label="CompletedState"];
+ Send -> Cmd [style=dashed,arrowhead=empty];Inv -> Cmd [arrowhead=vee];
+ Inv -> J [arrowhead=vee];J -> E [arrowhead=vee];
+ Cmd -> Bot [style=dashed,arrowhead=vee];Bot -> State [arrowhead=vee];
+ State -> G [dir=back,style=dashed,arrowtail=empty];State -> C [dir=back,style=dashed,arrowtail=empty];
+ State -> O [dir=back,style=dashed,arrowtail=empty];State -> F [dir=back,style=dashed,arrowtail=empty];
+}

@@ -1,0 +1,61 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Arial
+skinparam backgroundColor #F4F0E5
+skinparam classBackgroundColor #F4F0E5
+skinparam classBorderColor #141714
+left to right direction
+class SupportBot {
+ - _state: IChatState
+ + StateName: string
+ + Problem: string
+ + IsFinished: bool
+ + Receive(message: string)
+ + ChangeState(state: IChatState)
+ + ShowState()
+ + Say(message: string)
+}
+interface IChatState {
+ + Name: string
+ + Handle(bot: SupportBot, message: string)
+}
+class GreetingState
+class ClarificationState
+class OperatorState
+class CompletedState
+SupportBot --> IChatState : current state
+IChatState <|.. GreetingState
+IChatState <|.. ClarificationState
+IChatState <|.. OperatorState
+IChatState <|.. CompletedState
+interface IUserCommand {
+ + Message: string
+ + Execute(bot: SupportBot)
+}
+class SendMessageCommand {
+ + Message: string
+ + Execute(bot: SupportBot)
+}
+class CommandInvoker {
+ - _history: List<IUserCommand>
+ + Journal: ActionJournal
+ + Count: int
+ + Execute(command: IUserCommand, bot: SupportBot)
+ + Replay(): SupportBot
+}
+class ActionJournal {
+ + Entries: IReadOnlyList<JournalEntry>
+ + Add(message, before, after)
+ + Print(output)
+}
+class JournalEntry {
+ + Message: string
+ + Before: string
+ + After: string
+}
+IUserCommand <|.. SendMessageCommand
+CommandInvoker --> "0..*" IUserCommand : history
+CommandInvoker --> ActionJournal
+ActionJournal --> "0..*" JournalEntry
+SendMessageCommand ..> SupportBot : receiver
+@enduml
